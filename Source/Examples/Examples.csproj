@@ -59,6 +59,9 @@
     <Compile Include="Showcase\Menus.cs" />
     <Compile Include="Showcase\Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Showcase\SimpleTrainer\SpawnVehicleMenu.cs" />
+    <Compile Include="Showcase\SimpleTrainer\TrainerMenu.cs" />
+    <Compile Include="Showcase\SimpleTrainer\VehicleOptionsMenu.cs" />
     <Compile Include="Showcase\TimerBars.cs" />
     <Compile Include="SwitchMenusExample.cs" />
     <Compile Include="TimerBarsExample.cs" />

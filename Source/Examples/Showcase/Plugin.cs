@@ -13,21 +13,27 @@ internal static class Plugin
 
     public static MenuPool Pool { get; } = new MenuPool();
     private static UIMenu ShowcaseMenu { get; set; }
+    private static UIMenu TrainerMenu { get; set; }
 
     public static void Main()
     {
         Game.Console.Print("- Press F5 to open the showcase menu");
+        Game.Console.Print("- Press Shift+F5 to open the trainer menu");
         Game.Console.Print("- The following commands are available:");
         foreach (var name in Assembly.GetExecutingAssembly()
                                      .GetTypes()
                                      .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
-                                     .Where(m => m.GetCustomAttribute<Rage.Attributes.ConsoleCommandAttribute>() != null)
+                                     .Where(m => m.GetCustomAttribute<ConsoleCommandAttribute>() != null)
                                      .Select(m => m.Name))
         {
             Game.Console.Print($"      {name}");
         }
 
         ShowcaseMenu = new RNUIExamples.Showcase.MainMenu();
+        TrainerMenu = new RNUIExamples.Showcase.SimpleTrainer.TrainerMenu();
+
+        Game.DisplayHelp($"Press ~{Keys.F5.GetInstructionalId()}~ to open the showcase menu.~n~" +
+                         $"Press ~{Keys.LShiftKey.GetInstructionalId()}~ ~+~ ~{Keys.F5.GetInstructionalId()}~ to open the trainer menu.");
 
         // draw custom texture banners
         Game.RawFrameRender += (s, e) => Pool.DrawBanners(e.Graphics);
@@ -38,7 +44,14 @@ internal static class Plugin
 
             if (Game.IsKeyDown(Keys.F5) && !UIMenu.IsAnyMenuVisible && !TabView.IsAnyPauseMenuVisible)
             {
-                ShowcaseMenu.Visible = true;
+                if (Game.IsShiftKeyDownRightNow)
+                {
+                    TrainerMenu.Visible = true;
+                }
+                else
+                {
+                    ShowcaseMenu.Visible = true;
+                }
             }
 
             // process input and draw the visible menus

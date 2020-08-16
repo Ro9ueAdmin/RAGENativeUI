@@ -3,15 +3,10 @@
     using RAGENativeUI;
     using RAGENativeUI.Elements;
 
-    internal sealed class TrainerMenu : UIMenu
+    internal sealed class TrainerMenu : TrainerMenuBase
     {
-        public const string Title = "TRAINER";
-        public static string SubMenuTitle(string title) => $"{Title}: {title}";
-
-        public TrainerMenu() : base("", Title)
+        public TrainerMenu() : base(TopTitle)
         {
-            Plugin.Pool.Add(this);
-
             {
                 UIMenuItem item = new UIMenuItem("Spawn Vehicle");
 
@@ -25,18 +20,20 @@
                 AddItem(item);
                 BindMenuToItem(new VehicleOptionsMenu(), item);
             }
-
-            CustomizeMenu(this);
         }
+    }
 
-        public static void CustomizeMenu(UIMenu menu)
+    internal abstract class TrainerMenuBase : UIMenu
+    {
+        public const string TopTitle = "TRAINER";
+        public static string SubMenuTitle(string title) => $"{TopTitle}: {title}";
+
+        public TrainerMenuBase(string title) : base("", title)
         {
-            menu.Width += 0.04f;
-            menu.RemoveBanner();
-            foreach (var subMenu in menu.Children.Values)
-            {
-                CustomizeMenu(subMenu);
-            }
+            Plugin.Pool.Add(this);
+
+            Width += 0.04f;
+            RemoveBanner();
         }
     }
 }

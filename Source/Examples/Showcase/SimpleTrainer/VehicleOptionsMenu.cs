@@ -5,7 +5,7 @@
     using RAGENativeUI;
     using RAGENativeUI.Elements;
 
-    internal sealed class VehicleOptionsMenu : UIMenu
+    internal sealed class VehicleOptionsMenu : TrainerMenuBase
     {
         private Vehicle currentVehicle;
 
@@ -24,10 +24,8 @@
             }
         }
 
-        public VehicleOptionsMenu() : base("", TrainerMenu.SubMenuTitle("VEHICLE OPTIONS"))
+        public VehicleOptionsMenu() : base(SubMenuTitle("VEHICLE OPTIONS"))
         {
-            Plugin.Pool.Add(this);
-
             var repair = new UIMenuItem("Repair");
             repair.Activated += (s, i) => { if (CurrentVehicle) CurrentVehicle.Repair(); };
 

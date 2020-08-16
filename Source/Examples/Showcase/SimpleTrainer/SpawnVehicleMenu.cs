@@ -12,17 +12,14 @@
     using RAGENativeUI;
     using RAGENativeUI.Elements;
 
-    internal sealed class SpawnVehicleMenu : UIMenu
+    internal sealed class SpawnVehicleMenu : TrainerMenuBase
     {
         private readonly List<ClassMenu> classMenus = new List<ClassMenu>();
         private readonly SearchResultsMenu searchResultsMenu;
 
-        public SpawnVehicleMenu() : base("", TrainerMenu.SubMenuTitle("SPAWN VEHICLE"))
+        public SpawnVehicleMenu() : base(SubMenuTitle("SPAWN VEHICLE"))
         {
-            Plugin.Pool.Add(this);
-
             searchResultsMenu = new SearchResultsMenu();
-            TrainerMenu.CustomizeMenu(searchResultsMenu);
 
             foreach (var vehClass in Model.VehicleModels.GroupBy(GetClass))
             {
@@ -130,21 +127,19 @@
             }
         }
 
-        private sealed class ClassMenu : UIMenu
+        private sealed class ClassMenu : TrainerMenuBase
         {
             public VehicleClass Class { get; }
             public string LocalizedClass { get; }
             public ModelEntry[] Models { get; }
 
-            public ClassMenu(VehicleClass vehicleClass, IEnumerable<Model> models) : base("", "")
+            public ClassMenu(VehicleClass vehicleClass, IEnumerable<Model> models) : base("")
             {
-                Plugin.Pool.Add(this);
-
                 Class = vehicleClass;
                 string classLabel = $"VEH_CLASS_{(int)vehicleClass}";
                 LocalizedClass = Game.GetLocalizedString(classLabel);
 
-                SubtitleText = TrainerMenu.SubMenuTitle(LocalizedClass.ToUpperInvariant());
+                SubtitleText = SubMenuTitle(LocalizedClass.ToUpperInvariant());
 
                 Models = models.Select(m => new ModelEntry(m))
                                .OrderBy(m => m.ItemName)
@@ -161,20 +156,18 @@
             }
         }
 
-        private sealed class SearchResultsMenu : UIMenu
+        private sealed class SearchResultsMenu : TrainerMenuBase
         {
             public ModelEntry[] Models { get; private set; }
 
-            public SearchResultsMenu() : base("", "")
+            public SearchResultsMenu() : base("")
             {
-                Plugin.Pool.Add(this);
-
                 OnItemSelect += OnItemActivated;
             }
 
             public void SetSearchResults(string searchTerm, IEnumerable<ModelEntry> models)
             {
-                SubtitleText = TrainerMenu.SubMenuTitle($"'{searchTerm}' SEARCH RESULTS");
+                SubtitleText = SubMenuTitle($"'{searchTerm}' SEARCH RESULTS");
 
                 Clear();
 
